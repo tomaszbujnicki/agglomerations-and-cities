@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 
 <head>
 	<meta charset="UTF-8">
@@ -11,23 +11,23 @@
 
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Miasta i Aglomeracje Świata</title>
+	<title>Agglomerations & Cities</title>
 </head>
 
 <body>
 
 
 
-	<fieldset id="legend">
-		<legend>Populacja</legend>
+	<fieldset id="map-legend">
+		<legend>Population</legend>
 		<div>
 			<form>
-				<input type="radio" name="wybierzOpcje" id="wybierzMiasta" value="miasta" checked>Miasta<br>
-				<input type="radio" name="wybierzOpcje" id="wybierzAglomeracje" value="aglomeracje">Aglomeracje<br>
+				<input type="radio" name="selectOption" id="selectCities" value="cities" checked>Cities<br>
+				<input type="radio" name="selectOption" id="selectAgglomerations" value="agglomerations">Agglomerations<br>
 			</form>
 		</div>
 
-		<div id="legendMiasta">
+		<div id="map-legend_cities">
 			<div>
 				<input type="color" id="colorSmallCity" value="#228822">
 				<input type="checkbox" id="hideSmallCity" name="hide-smallCity" checked>
@@ -45,22 +45,22 @@
 				<label for="hide-bigCity">> 2.5m</label>
 			</div>
 		</div>
-		<div id="legendAglomeracje" class="hide">
+		<div id="map-legend_agglomerations" class="hide">
 			<div>
 				<input type="color" id="colorSmall" value="#2222dd">
 				<input type="checkbox" id="hideSmall" name="hide-small" checked>
-				<label for="hide-small">1 - 3 mln</label>
+				<label for="hide-small">1 - 3 m</label>
 			</div>
 
 			<div>
 				<input type="color" id="colorMedium" value="#dd2222">
 				<input type="checkbox" id="hideMedium" name="hide-medium" checked>
-				<label for="horns">3 - 10 mln</label>
+				<label for="horns">3 - 10 m</label>
 			</div>
 			<div>
 				<input type="color" id="colorBig" value="#333333">
 				<input type="checkbox" id="hideBig" name="hide-big" checked>
-				<label for="hide-big">> 10 mln</label>
+				<label for="hide-big">> 10 m</label>
 			</div>
 		</div>
 
@@ -72,7 +72,8 @@
 
 	<!-- Make sure you put this AFTER Leaflet's CSS -->
 	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
-	<script src="dane.js"></script>
+	<script src="data/agglomerationsData.js"></script>
+	<script src="data/citiesData.js"></script>
 	<script src="script.js"></script>
 
 </body>

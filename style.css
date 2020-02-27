@@ -3,13 +3,12 @@
 	width: 100%;
 	z-index: 1;
 }
-.kolo{
-	border: 100px;
-}
+
 .hide{
 	display: none;
 }
-#legend{
+
+#map-legend{
 	position: absolute;
 	z-index: 100;
 	right: 2vw;
@@ -17,6 +16,7 @@
 	background-color: azure;
 	min-width: 170px;
 }
+
 legend{
 	font-size: 20px;
 	background: azure;

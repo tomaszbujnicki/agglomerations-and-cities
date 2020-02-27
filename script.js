@@ -11,40 +11,40 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 	accessToken: 'pk.eyJ1IjoiemllbG9ueWt3YXMiLCJhIjoiY2s1bGlncWgyMDU4NDNrcWl2cGYweHV1YiJ9.UGamVCbOWZHvAEdFAJoUcw'
 }).addTo(mymap);
 
-const POPULACJA = {
-	populacjaMiasta: {
-		big: 2500000,
+const POPULATION = {
+	cityPopulation: {
+		big:   2500000,
 		medium: 500000,
-		small: 100000
+		small:  100000
 	},
-	populacja: {
-		big: 10000000,
+	population: {
+		big:   10000000,
 		medium: 3000000,
-		small: 100000
+		small:  1000000
 	}
 };
 
 
-function populacjaFunction(x, populacja) {
-	if (x > populacja.big) return populacja.big;
-	if (x > populacja.medium) return populacja.medium;
-	if (x > populacja.small) return populacja.small;
+function populationFunction(x, population) {
+	if (x > population.big) return population.big;
+	if (x > population.medium) return population.medium;
+	if (x > population.small) return population.small;
 }
 
-for (i = 0; i < miasta.length; i++) {
-	const populacjaMiasta = POPULACJA.populacjaMiasta;
-	switch (populacjaFunction(miasta[i].populacja, populacjaMiasta)) {
-		case populacjaMiasta.big:
+for (i = 0; i < cities.length; i++) {
+	const cityPopulation = POPULATION.cityPopulation;
+	switch (populationFunction(cities[i].population, cityPopulation)) {
+		case cityPopulation.big:
 			cityFillColor = document.getElementById("colorBigCity").value;
 			cityFillOpacity = 1;
 			cityClassName = "bigCity";
 			break;
-		case populacjaMiasta.medium:
+		case cityPopulation.medium:
 			cityFillColor = document.getElementById("colorMediumCity").value;
 			cityFillOpacity = 1;
 			cityClassName = "mediumCity";
 			break;
-		case populacjaMiasta.small:
+		case cityPopulation.small:
 			cityFillColor = document.getElementById("colorSmallCity").value;
 			cityFillOpacity = 1;
 			cityClassName = "smallCity";
@@ -56,33 +56,33 @@ for (i = 0; i < miasta.length; i++) {
 			cityClassName = "smallCiy";
 	}
 	let circle = L.circle(
-		[miasta[i].szerokoscGeo, miasta[i].dlugoscGeo], {
+		[cities[i].latitude, cities[i].longitude], {
 			fillColor: cityFillColor,
 			fillOpacity: cityFillOpacity,
-			radius: Math.sqrt(miasta[i].populacja * 1000),
-			className: cityClassName + " miastoClass",
+			radius: Math.sqrt(cities[i].population * 1000),
+			className: cityClassName + " cityClass",
 			stroke: false,
 		}
 	).addTo(mymap);
-	let popupLabel = miasta[i].nazwa + " " + miasta[i].populacja.toLocaleString();
+	let popupLabel = cities[i].name + " " + cities[i].population.toLocaleString();
 	circle.bindPopup(popupLabel);
 }
 
-for (i = 0; i < metropolie.length; i++) {
-	const populacja = POPULACJA.populacja;
+for (i = 0; i < agglomerations.length; i++) {
+	const population = POPULATION.population;
 
-	switch (populacjaFunction(metropolie[i].populacja, populacja)) {
-		case 10000:
+	switch (populationFunction(agglomerations[i].population, population)) {
+		case population.big:
 			cityFillColor = document.getElementById("colorBig").value;
 			cityFillOpacity = 1;
 			cityClassName = "big";
 			break;
-		case 3000:
+		case population.medium:
 			cityFillColor = document.getElementById("colorMedium").value;
 			cityFillOpacity = 1;
 			cityClassName = "medium";
 			break;
-		case 1000:
+		case population.small:
 			cityFillColor = document.getElementById("colorSmall").value;
 			cityFillOpacity = 1;
 			cityClassName = "small";
@@ -94,27 +94,19 @@ for (i = 0; i < metropolie.length; i++) {
 			cityClassName = "small";
 	}
 	let circle = L.circle(
-		[metropolie[i].szerokoscGeo, metropolie[i].dlugoscGeo], {
+		[agglomerations[i].latitude, agglomerations[i].longitude], {
 			fillColor: cityFillColor,
 			fillOpacity: cityFillOpacity,
-			radius: Math.sqrt(metropolie[i].populacja * 1000),
+			radius: Math.sqrt(agglomerations[i].population * 1000),
 			className: cityClassName + " aglomeracjaClass hide",
 			stroke: false,
 		}
 	).addTo(mymap);
-	let popupLabel = metropolie[i].nazwa + " " + metropolie[i].populacja.toLocaleString();
+	let popupLabel = agglomerations[i].name + " " + agglomerations[i].population.toLocaleString();
 	circle.bindPopup(popupLabel);
 }
 
 L.control.scale().addTo(mymap);
-
-/*setInterval(function(){
-	mymap.setView([0, 0]);
-	setTimeout(function(){
-		circle.setView([60, 0]);
-	}, 2000);
-}, 4000);*/
-
 
 document.getElementById("hideSmall").addEventListener("click", function () {
 	let arrayCityClassName = document.getElementsByClassName("small");
@@ -204,11 +196,11 @@ document.getElementById("colorBig").addEventListener("change", function () {
 		arrayCityClassName[i].style = "fill: " + newColor;
 	}
 });
-document.getElementById("wybierzAglomeracje").addEventListener("change", function () {
+document.getElementById("selectAgglomerations").addEventListener("change", function () {
 	if (this.checked) {
-		document.getElementById("legendAglomeracje").classList.remove("hide");
-		document.getElementById("legendMiasta").classList.add("hide");
-		let arrayCityClassName = document.getElementsByClassName("miastoClass");
+		document.getElementById("map-legend_agglomerations").classList.remove("hide");
+		document.getElementById("map-legend_cities").classList.add("hide");
+		let arrayCityClassName = document.getElementsByClassName("cityClass");
 		for (i = 0; i < arrayCityClassName.length; i++) {
 			arrayCityClassName[i].classList.add("hide");
 		}
@@ -225,10 +217,10 @@ document.getElementById("wybierzAglomeracje").addEventListener("change", functio
 		}
 	}
 });
-document.getElementById("wybierzMiasta").addEventListener("change", function () {
+document.getElementById("selectCities").addEventListener("change", function () {
 	if (this.checked) {
-		document.getElementById("legendMiasta").classList.remove("hide");
-		document.getElementById("legendAglomeracje").classList.add("hide");
+		document.getElementById("map-legend_cities").classList.remove("hide");
+		document.getElementById("map-legend_agglomerations").classList.add("hide");
 		let arrayCityClassName = document.getElementsByClassName("aglomeracjaClass");
 		for (i = 0; i < arrayCityClassName.length; i++) {
 			arrayCityClassName[i].classList.add("hide");
