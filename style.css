@@ -1,0 +1,26 @@
+#mapid { 
+	height: 90vh;
+	width: 100%;
+	z-index: 1;
+}
+.kolo{
+	border: 100px;
+}
+.hide{
+	display: none;
+}
+#legend{
+	position: absolute;
+	z-index: 100;
+	right: 2vw;
+	top: 2vh;
+	background-color: azure;
+	min-width: 170px;
+}
+legend{
+	font-size: 20px;
+	background: azure;
+	border: 1px solid black;
+	margin: 0 auto;
+	padding: 0 20px;
+}
