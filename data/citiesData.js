@@ -23795,4 +23795,5 @@ const cities = [
 		latitude: 7.07,
 		longitude: -73.17
 	}
+
 ]

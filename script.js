@@ -121,7 +121,7 @@ function showOnMap(type){
 	}
 
 }
-const circleType = [
+const placeType = [
 	"city-small",
 	"city-medium",
 	"city-big",
@@ -130,146 +130,27 @@ const circleType = [
 	"agglomeration-big",
 ]
 
-for (const i in circleType){
-$('#check-'+ circleType[i]).click(function () {console.log("click");
+for (const i in placeType){
+$('#check-'+ placeType[i]).click(function () {
 	if (this.checked) {
-		showElementsByClassName(circleType[i]);
+		showElementsByClassName(placeType[i]);
 	} else {
-		hideElementsByClassName(circleType[i]);
+		hideElementsByClassName(placeType[i]);
 	}
 });
 }
-//check-agglomeration-small
 
-/* 
-$('#hideSmallCity').click(function () {
-	if (this.checked) {
-		$(".smallCity").removeClass("hide")
-	} else {
-		$(".smallCity").addClass("hide")
-	}
-});
-$('#hideMediumCity').click(function () {
-	if (this.checked) {
-		$(".mediumCity").removeClass("hide")
-	} else {
-		$(".mediumCity").addClass("hide")
-	}
-});
-$('#hideBigCity').click(function () {
-	if (this.checked) {
-		$(".bigCity").removeClass("hide")
-	} else {
-		$(".bigCity").addClass("hide")
-	}
-});
-$('#hideSmallAgglomeration').click(function () {
-	if (this.checked) {
-		$(".smallAgglomeration").removeClass("hide")
-	} else {
-		$(".smallAgglomeration").addClass("hide")
-	}
-});
-$('#hideMediumAgglomeration').click(function () {
-	if (this.checked) {
-		$(".mediumAgglomeration").removeClass("hide")
-	} else {
-		$(".mediumAgglomeration").addClass("hide")
-	}
-});
-$('#hideBigAgglomeration').click(function () {
-	if (this.checked) {
-		$(".bigAgglomeration").removeClass("hide")
-	} else {
-		$(".bigAgglomeration").addClass("hide")
-	}
-});
-
-document.getElementById("colorSmallCity").addEventListener("change", function () {
-	let newColor = document.getElementById("colorSmallCity").value;
-	let arrayCityClassName = document.getElementsByClassName("smallCity");
-	for (i = 0; i < arrayCityClassName.length; i++) {
-		arrayCityClassName[i].style = "fill: " + newColor;
-	}
-});
-document.getElementById("colorMediumCity").addEventListener("change", function () {
-	let newColor = document.getElementById("colorMediumCity").value;
-	let arrayCityClassName = document.getElementsByClassName("mediumCity");
-	for (i = 0; i < arrayCityClassName.length; i++) {
-		arrayCityClassName[i].style = "fill: " + newColor;
-	}
-});
-document.getElementById("colorBigCity").addEventListener("change", function () {
-	let newColor = document.getElementById("colorBigCity").value;
-	let arrayCityClassName = document.getElementsByClassName("bigCity");
-	for (i = 0; i < arrayCityClassName.length; i++) {
-		arrayCityClassName[i].style = "fill: " + newColor;
-	}
-});
-document.getElementById("colorSmallAgglomeration").addEventListener("change", function () {
-	let newColor = document.getElementById("colorSmallAgglomeration").value;
-	let arrayCityClassName = document.getElementsByClassName("smallAgglomeration");
-	for (i = 0; i < arrayCityClassName.length; i++) {
-		arrayCityClassName[i].style = "fill: " + newColor;
-	}
-});
-document.getElementById("colorMediumAgglomeration").addEventListener("change", function () {
-	let newColor = document.getElementById("colorMediumAgglomeration").value;
-	let arrayCityClassName = document.getElementsByClassName("mediumAgglomeration");
-	for (i = 0; i < arrayCityClassName.length; i++) {
-		arrayCityClassName[i].style = "fill: " + newColor;
-	}
-});
-document.getElementById("colorBigAgglomeration").addEventListener("change", function () {
-	let newColor = document.getElementById("colorBigAgglomeration").value;
-	let arrayCityClassName = document.getElementsByClassName("bigAgglomeration");
-	for (i = 0; i < arrayCityClassName.length; i++) {
-		arrayCityClassName[i].style = "fill: " + newColor;
-	}
-});
-document.getElementById("selectAgglomerations").addEventListener("change", function () {
-	if (this.checked) {
-		document.getElementById("map-legend_agglomerations").classList.remove("hide");
-		document.getElementById("map-legend_cities").classList.add("hide");
-		let arrayCityClassName = document.getElementsByClassName("cityClass");
-		for (i = 0; i < arrayCityClassName.length; i++) {
-			arrayCityClassName[i].classList.add("hide");
-		}
-
-		
-		if (document.getElementById("hideSmallAgglomeration").checked){
-			$(".smallAgglomeration").removeClass("hide")
-		}
-		if (document.getElementById("hideMediumAgglomeration").checked){
-			$(".mediumAgglomeration").removeClass("hide")
-		}
-		if (document.getElementById("hideBigAgglomeration").checked){
-			$(".bigAgglomeration").removeClass("hide")
-		}
-	}
-});
-document.getElementById("selectCities").addEventListener("change", function () {
-	if (this.checked) {
-		document.getElementById("map-legend_cities").classList.remove("hide");
-		document.getElementById("map-legend_agglomerations").classList.add("hide");
-		let arrayCityClassName = document.getElementsByClassName("agglomerationClass");
-		for (i = 0; i < arrayCityClassName.length; i++) {
-			arrayCityClassName[i].classList.add("hide");
-		}
-
-
-		if (document.getElementById("hideSmallCity").checked){
-			$(".smallCity").removeClass("hide")
-		}
-		if (document.getElementById("hideMediumCity").checked){
-			$(".mediumCity").removeClass("hide")
-		}
-		if (document.getElementById("hideBigCity").checked){
-			$(".bigCity").removeClass("hide")
-		}
+for (const i in placeType){
+	const element = document.getElementById('color-' + placeType[i]);
+	element.addEventListener("change", function () {
+		const newColor = element.value;
+		const elementsArr = document.getElementsByClassName(placeType[i]);
+		for (const i in elementsArr) {
+			elementsArr[i].style = "fill: " + newColor;
+		}	
+	});
+}
 
 
 
-	}
-});
- */
+
