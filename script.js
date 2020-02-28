@@ -1,8 +1,3 @@
-let cityFillColor = "green";
-let cityFillOpacity = 1;
-let cityClassName = "small";
-
-
 var mymap = L.map('mapid').setView([51.110, 17.030], 4);
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -11,113 +6,142 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 	accessToken: 'pk.eyJ1IjoiemllbG9ueWt3YXMiLCJhIjoiY2s1bGlncWgyMDU4NDNrcWl2cGYweHV1YiJ9.UGamVCbOWZHvAEdFAJoUcw'
 }).addTo(mymap);
 
+L.control.scale().addTo(mymap);
+
 const POPULATION = {
-	cityPopulation: {
+	city: {
 		big:   2500000,
 		medium: 500000,
-		small:  100000
 	},
-	population: {
+	agglomeration: {
 		big:   10000000,
 		medium: 3000000,
-		small:  1000000
 	}
 };
 
 
-function populationFunction(x, population) {
-	if (x > population.big) return population.big;
-	if (x > population.medium) return population.medium;
-	if (x > population.small) return population.small;
+function compareSize(placePopulation, population) {
+	if (placePopulation > population.big) return "big";
+	if (placePopulation > population.medium) return "medium";
+	return "small";
 }
 
-for (i = 0; i < cities.length; i++) {
-	const cityPopulation = POPULATION.cityPopulation;
-	switch (populationFunction(cities[i].population, cityPopulation)) {
-		case cityPopulation.big:
-			cityFillColor = document.getElementById("colorBigCity").value;
-			cityFillOpacity = 1;
-			cityClassName = "bigCity";
+drawCircles(cities,"city");
+drawCircles(agglomerations,"agglomeration");
+
+function drawCircles (placesArr,type){
+	let fillColor = "green";
+	let className = "small";
+	const colorBig = document.getElementById("color-" + type + "-big").value
+	const colorMedium = document.getElementById("color-" + type + "-medium").value
+	const colorSmall = document.getElementById("color-" + type + "-small").value
+
+	for (const place of placesArr) {
+
+	switch (compareSize(place.population, POPULATION[type])) {
+		case "big":
+			fillColor = colorBig;
+			className = type + "-big";
 			break;
-		case cityPopulation.medium:
-			cityFillColor = document.getElementById("colorMediumCity").value;
-			cityFillOpacity = 1;
-			cityClassName = "mediumCity";
+		case "medium":
+			fillColor = colorMedium;
+			className = type + "-medium";
 			break;
-		case cityPopulation.small:
-			cityFillColor = document.getElementById("colorSmallCity").value;
-			cityFillOpacity = 1;
-			cityClassName = "smallCity";
+		case "small":
+			fillColor = colorSmall;
+			className = type + "-small";
 			break;
 
 		default:
-			cityFillColor = "green";
-			cityFillOpacity = 0.5;
-			cityClassName = "smallCiy";
+			fillColor = colorSmall;
+			className = type + "-small";
 	}
+
 	let circle = L.circle(
-		[cities[i].latitude, cities[i].longitude], {
-			fillColor: cityFillColor,
-			fillOpacity: cityFillOpacity,
-			radius: Math.sqrt(cities[i].population * 1000),
-			className: cityClassName + " cityClass",
+		[place.latitude, place.longitude], {
+			fillColor: fillColor,
+			fillOpacity: 1,
+			radius: Math.sqrt(place.population * 1000),
+			className: className,
 			stroke: false,
 		}
 	).addTo(mymap);
-	let popupLabel = cities[i].name + " " + cities[i].population.toLocaleString();
+	let popupLabel = place.name + " " + place.population.toLocaleString();
 	circle.bindPopup(popupLabel);
 }
+}
+hideElementsByClassName("agglomeration-big");
+hideElementsByClassName("agglomeration-medium");
+hideElementsByClassName("agglomeration-small");
 
-for (i = 0; i < agglomerations.length; i++) {
-	const population = POPULATION.population;
 
-	switch (populationFunction(agglomerations[i].population, population)) {
-		case population.big:
-			cityFillColor = document.getElementById("colorBig").value;
-			cityFillOpacity = 1;
-			cityClassName = "big";
-			break;
-		case population.medium:
-			cityFillColor = document.getElementById("colorMedium").value;
-			cityFillOpacity = 1;
-			cityClassName = "medium";
-			break;
-		case population.small:
-			cityFillColor = document.getElementById("colorSmall").value;
-			cityFillOpacity = 1;
-			cityClassName = "small";
-			break;
+function hideElementsByClassName(className){
+	$("." + className).addClass("hide");
+}
+function showElementsByClassName(className){
+	$("." + className).removeClass("hide");
+}
 
-		default:
-			cityFillColor = "green";
-			cityFillOpacity = 0.5;
-			cityClassName = "small";
+$('#selectAgglomerations').click(function () {
+	showOnMap("agglomeration")
+});
+$('#selectCities').click(function () {
+	showOnMap("city")
+});
+
+function showOnMap(type){
+
+	if (type === "city"){
+		$('#map-legend_cities').removeClass("hide");
+		if (document.getElementById("check-city-small").checked) 	showElementsByClassName("city-small");
+		if (document.getElementById("check-city-medium").checked)  showElementsByClassName("city-medium");
+		if (document.getElementById("check-city-big").checked) 	showElementsByClassName("city-big");
 	}
-	let circle = L.circle(
-		[agglomerations[i].latitude, agglomerations[i].longitude], {
-			fillColor: cityFillColor,
-			fillOpacity: cityFillOpacity,
-			radius: Math.sqrt(agglomerations[i].population * 1000),
-			className: cityClassName + " aglomeracjaClass hide",
-			stroke: false,
-		}
-	).addTo(mymap);
-	let popupLabel = agglomerations[i].name + " " + agglomerations[i].population.toLocaleString();
-	circle.bindPopup(popupLabel);
+	else{
+		$('#map-legend_cities').addClass("hide");
+		hideElementsByClassName("city-big");
+		hideElementsByClassName("city-medium");
+		hideElementsByClassName("city-small");
+
+	}
+
+
+	if (type === "agglomeration"){
+		$('#map-legend_agglomerations').removeClass("hide");
+		if (document.getElementById("check-agglomeration-small").checked) 	showElementsByClassName("agglomeration-small");
+		if (document.getElementById("check-agglomeration-medium").checked)  showElementsByClassName("agglomeration-medium");
+		if (document.getElementById("check-agglomeration-big").checked) 	showElementsByClassName("agglomeration-big");
+	}
+	else{
+		$('#map-legend_agglomerations').addClass("hide");
+		hideElementsByClassName("agglomeration-big");
+		hideElementsByClassName("agglomeration-medium");
+		hideElementsByClassName("agglomeration-small");
+
+	}
+
 }
+const circleType = [
+	"city-small",
+	"city-medium",
+	"city-big",
+	"agglomeration-small",
+	"agglomeration-medium",
+	"agglomeration-big",
+]
 
-L.control.scale().addTo(mymap);
-
-document.getElementById("hideSmall").addEventListener("click", function () {
-	let arrayCityClassName = document.getElementsByClassName("small");
-	for (i = 0; i < arrayCityClassName.length; i++) {
-		if (this.checked) {
-			arrayCityClassName[i].classList.remove("hide");
-		} else {
-			arrayCityClassName[i].classList.add("hide");
-		}
+for (const i in circleType){
+$('#check-'+ circleType[i]).click(function () {console.log("click");
+	if (this.checked) {
+		showElementsByClassName(circleType[i]);
+	} else {
+		hideElementsByClassName(circleType[i]);
 	}
 });
+}
+//check-agglomeration-small
+
+/* 
 $('#hideSmallCity').click(function () {
 	if (this.checked) {
 		$(".smallCity").removeClass("hide")
@@ -139,18 +163,25 @@ $('#hideBigCity').click(function () {
 		$(".bigCity").addClass("hide")
 	}
 });
-$('#hideMedium').click(function () {
+$('#hideSmallAgglomeration').click(function () {
 	if (this.checked) {
-		$(".medium").removeClass("hide")
+		$(".smallAgglomeration").removeClass("hide")
 	} else {
-		$(".medium").addClass("hide")
+		$(".smallAgglomeration").addClass("hide")
 	}
 });
-$('#hideBig').click(function () {
+$('#hideMediumAgglomeration').click(function () {
 	if (this.checked) {
-		$(".big").removeClass("hide")
+		$(".mediumAgglomeration").removeClass("hide")
 	} else {
-		$(".big").addClass("hide")
+		$(".mediumAgglomeration").addClass("hide")
+	}
+});
+$('#hideBigAgglomeration').click(function () {
+	if (this.checked) {
+		$(".bigAgglomeration").removeClass("hide")
+	} else {
+		$(".bigAgglomeration").addClass("hide")
 	}
 });
 
@@ -175,23 +206,23 @@ document.getElementById("colorBigCity").addEventListener("change", function () {
 		arrayCityClassName[i].style = "fill: " + newColor;
 	}
 });
-document.getElementById("colorSmall").addEventListener("change", function () {
-	let newColor = document.getElementById("colorSmall").value;
-	let arrayCityClassName = document.getElementsByClassName("small");
+document.getElementById("colorSmallAgglomeration").addEventListener("change", function () {
+	let newColor = document.getElementById("colorSmallAgglomeration").value;
+	let arrayCityClassName = document.getElementsByClassName("smallAgglomeration");
 	for (i = 0; i < arrayCityClassName.length; i++) {
 		arrayCityClassName[i].style = "fill: " + newColor;
 	}
 });
-document.getElementById("colorMedium").addEventListener("change", function () {
-	let newColor = document.getElementById("colorMedium").value;
-	let arrayCityClassName = document.getElementsByClassName("medium");
+document.getElementById("colorMediumAgglomeration").addEventListener("change", function () {
+	let newColor = document.getElementById("colorMediumAgglomeration").value;
+	let arrayCityClassName = document.getElementsByClassName("mediumAgglomeration");
 	for (i = 0; i < arrayCityClassName.length; i++) {
 		arrayCityClassName[i].style = "fill: " + newColor;
 	}
 });
-document.getElementById("colorBig").addEventListener("change", function () {
-	let newColor = document.getElementById("colorBig").value;
-	let arrayCityClassName = document.getElementsByClassName("big");
+document.getElementById("colorBigAgglomeration").addEventListener("change", function () {
+	let newColor = document.getElementById("colorBigAgglomeration").value;
+	let arrayCityClassName = document.getElementsByClassName("bigAgglomeration");
 	for (i = 0; i < arrayCityClassName.length; i++) {
 		arrayCityClassName[i].style = "fill: " + newColor;
 	}
@@ -206,14 +237,14 @@ document.getElementById("selectAgglomerations").addEventListener("change", funct
 		}
 
 		
-		if (document.getElementById("hideSmall").checked){
-			$(".small").removeClass("hide")
+		if (document.getElementById("hideSmallAgglomeration").checked){
+			$(".smallAgglomeration").removeClass("hide")
 		}
-		if (document.getElementById("hideMedium").checked){
-			$(".medium").removeClass("hide")
+		if (document.getElementById("hideMediumAgglomeration").checked){
+			$(".mediumAgglomeration").removeClass("hide")
 		}
-		if (document.getElementById("hideBig").checked){
-			$(".big").removeClass("hide")
+		if (document.getElementById("hideBigAgglomeration").checked){
+			$(".bigAgglomeration").removeClass("hide")
 		}
 	}
 });
@@ -221,7 +252,7 @@ document.getElementById("selectCities").addEventListener("change", function () {
 	if (this.checked) {
 		document.getElementById("map-legend_cities").classList.remove("hide");
 		document.getElementById("map-legend_agglomerations").classList.add("hide");
-		let arrayCityClassName = document.getElementsByClassName("aglomeracjaClass");
+		let arrayCityClassName = document.getElementsByClassName("agglomerationClass");
 		for (i = 0; i < arrayCityClassName.length; i++) {
 			arrayCityClassName[i].classList.add("hide");
 		}
@@ -241,3 +272,4 @@ document.getElementById("selectCities").addEventListener("change", function () {
 
 	}
 });
+ */
